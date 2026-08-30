@@ -37,6 +37,4 @@ Prepare receptors and ligands correctly before docking. Verify the docking grid 
 
 Docking scores are computational predictions and should not be considered experimental binding affinities.
 
-## License
 
-See the repository LICENSE file for usage and distribution terms.
