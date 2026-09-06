@@ -14,7 +14,7 @@ The Molecular Docking page now begins with a dedicated Receptor Preparation stag
 
 - Select PDB or mmCIF.
 - PDB inspector groups protein residues, HETATM records by residue/molecule, and water molecules separately.
-- pdb fixer options
+- pdb fixer options available
 - HETATM groups are not displayed atom-by-atom in the list.
 - Selecting one HETATM group shows exact PDB X/Y/Z coordinates in Angstroms for every atom in that group; the centroid is shown only as a calculated summary and never replaces the individual coordinates.
 - Multiple residues, HETATM groups, and waters can be selected across the three lists and removed from a working PDB copy.
