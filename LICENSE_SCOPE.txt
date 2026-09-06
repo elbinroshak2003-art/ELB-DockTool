@@ -1,0 +1,23 @@
+ELB DockTool v1.2.0 — LICENSE SCOPE
+
+This proprietary license applies ONLY to the ELB DockTool GUI and other
+proprietary ELB components owned by the copyright holder.
+
+It does NOT apply to, replace, or restrict third-party software, libraries,
+data, databases, services, or executables used by the application.
+
+Examples include:
+- Meeko — GNU LGPL v2.1
+- AutoDock Vina — Apache License 2.0
+- IMPPAT 2.0 — independent database/resource with its own terms/license
+- Sanjay Valliappan IMPPAT downloader adaptation — applicable MIT license
+- Python, RDKit, ProDy, Open Babel, and other external dependencies — their
+  respective licenses
+
+ELB proprietary components:
+- academic/non-commercial research use only;
+- commercial use prohibited without separate written permission;
+- modification prohibited, subject to non-waivable legal rights;
+- redistribution prohibited, subject to independent third-party rights.
+
+See LICENSE.txt and THIRD-PARTY-NOTICES/ for the complete scope and notices.

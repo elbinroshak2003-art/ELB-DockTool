@@ -1,0 +1,245 @@
+ELB DockTool v1.2.0
+RECEPTOR PREPARATION — PYTHON / MEEKO DEPENDENCY INSTALLATION GUIDE
+
+PURPOSE
+-------
+This guide explains how to install and verify the external Python environment
+required by ELB DockTool's Receptor Preparation module.
+
+IMPORTANT
+---------
+ELB DockTool does NOT redistribute or re-license Python, Meeko, RDKit, NumPy,
+SciPy, Gemmi, ProDy, Pillow, or other third-party Python packages.
+
+The ELB DockTool license applies ONLY to ELB's own proprietary GUI/application
+components. Third-party software remains under its own license.
+
+RECOMMENDED WINDOWS SETUP
+-------------------------
+Use Python 3.14 (64-bit) for the setup shown below. ELB can also detect
+compatible Python 3.10+ installations.
+
+1. CHECK PYTHON
+---------------
+Open Command Prompt and run:
+
+    python --version
+    py --version
+    py -0p
+
+A Python 3.10+ installation is required.
+
+If `python --version` reports an old Python (for example Python 2.7), do NOT
+use that interpreter. Prefer the Windows Python Launcher command `py -3.x`.
+
+2. INSTALL PYTHON IF NECESSARY
+------------------------------
+Download Python from the official Python website:
+
+    https://www.python.org/downloads/windows/
+
+Install Python 3.14 (64-bit).
+
+During installation, enable:
+    [x] Add python.exe to PATH
+
+Then open a NEW Command Prompt and verify:
+
+    py -3.14 --version
+
+3. UPGRADE PIP
+-------------
+Run:
+
+    py -3.14 -m pip install --upgrade pip
+
+Test:
+
+    py -3.14 -m pip --version
+
+4. INSTALL AND TEST REQUIRED PACKAGES
+--------------------------------------
+Install and test each package one at a time.
+
+NumPy:
+
+    py -3.14 -m pip install numpy
+    Test: py -3.14 -c "import numpy; print(numpy.__version__)"
+
+SciPy:
+
+    py -3.14 -m pip install scipy
+    Test: py -3.14 -c "import scipy; print(scipy.__version__)"
+
+RDKit:
+
+    py -3.14 -m pip install rdkit
+    Test: py -3.14 -c "import rdkit; print(rdkit.__version__)"
+
+Gemmi:
+
+    py -3.14 -m pip install gemmi
+    Test: py -3.14 -c "import gemmi; print(gemmi.__version__)"
+
+TQDM:
+
+    py -3.14 -m pip install tqdm
+    Test: py -3.14 -c "import tqdm; print(tqdm.__version__)"
+
+ProDy:
+
+    py -3.14 -m pip install prody
+    Test: py -3.14 -c "import prody; print(prody.__version__)"
+
+ProDy is required by ELB's mmCIF preparation path. It is not required for
+Meeko's standard PDB reader, but installing it is recommended for full input
+support.
+
+5. INSTALL AND TEST MEEKO
+-------------------------
+Install Meeko:
+
+    py -3.14 -m pip install meeko
+
+Test the Python package:
+
+    py -3.14 -c "import meeko; print(meeko.__version__)"
+
+6. VERIFY THE MEEKO RECEPTOR CLI
+--------------------------------
+Run:
+
+    py -3.14 -m meeko.cli.mk_prepare_receptor --help
+
+If the Meeko help page appears, the receptor-preparation CLI is available.
+
+7. CONFIGURE ELB DOCKTOOL
+-------------------------
+Start ELB DockTool.
+
+Open:
+    Settings
+
+Find:
+    Python interpreter for Meeko
+
+Use:
+    AUTO-DETECT (Python 3.10+ with Meeko)
+
+if available.
+
+Otherwise select the compatible Python executable, for example:
+
+    C:\Users\<YOUR_USER>\AppData\Local\Programs\Python\Python314\python.exe
+
+Then click:
+    VERIFY PYTHON / MEEKO
+
+ELB automatically checks compatible Python installations and whether Meeko
+can be imported.
+
+DEPENDENCY SUMMARY
+------------------
+Core Meeko environment used by this workflow:
+    Python 3.10+
+    Meeko
+    RDKit
+    NumPy
+    SciPy
+    Gemmi
+    tqdm
+
+For mmCIF support:
+    ProDy
+
+Other package dependencies may be installed automatically by pip as required
+by the selected Meeko/package versions.
+
+Not required by the Meeko receptor-preparation path:
+    Open Babel
+
+ELB does not silently replace Meeko receptor preparation with Open Babel.
+
+POLAR HYDROGENS
+---------------
+ELB uses Meeko receptor preparation and verifies the generated PDBQT for
+polar hydrogen atoms represented by the PDBQT `HD` atom type.
+
+There is no separate invented `--polar_hydrogens` Meeko CLI switch in this
+guide.
+
+LICENSE / THIRD-PARTY NOTICE
+----------------------------
+The ELB DockTool proprietary license applies ONLY to ELB's own GUI,
+application code, workflow logic, and other components expressly owned by
+the ELB DockTool copyright holder.
+
+It does NOT apply to:
+    - Python
+    - Meeko
+    - RDKit
+    - NumPy
+    - SciPy
+    - Gemmi
+    - ProDy
+    - Pillow
+    - AutoDock Vina
+    - IMPPAT data/services
+    - Open Babel
+    - Any other third-party software or data
+
+Each third-party component remains subject to its own license and terms.
+
+MEEKO
+-----
+Meeko is an independent third-party project.
+
+License:
+    GNU LGPL v2.1 or later, as applicable to the distributed Meeko version.
+
+Project:
+    https://github.com/forlilab/Meeko
+
+Documentation:
+    https://meeko.readthedocs.io/
+
+IMPPAT
+------
+Official site:
+    https://cb.imsc.res.in/imppat/
+
+ELB does not claim ownership of IMPPAT data.
+
+TROUBLESHOOTING
+---------------
+If ELB says Python was not found:
+
+    python --version
+    py --version
+    py -0p
+
+If Python 3.14 is installed:
+
+    py -3.14 --version
+
+If Meeko is missing:
+
+    py -3.14 -m pip install meeko
+    py -3.14 -c "import meeko; print(meeko.__version__)"
+    py -3.14 -m meeko.cli.mk_prepare_receptor --help
+
+If ProDy is missing:
+
+    py -3.14 -m pip install prody
+    py -3.14 -c "import prody; print(prody.__version__)"
+
+If the wrong Python is being used, use the full Python executable path in
+ELB Settings rather than relying on the legacy `python` command.
+
+SECURITY
+--------
+Do not download random copies of Python packages from unofficial websites.
+Use the official Python distribution and standard Python package installation
+mechanisms.
+
+END OF GUIDE
