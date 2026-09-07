@@ -2,8 +2,30 @@
 
 This package integrates a WebView2-hosted, independently authored docking interpretation interface into the ELB-DockTool WinForms application. The Results page contains **VIEW COMPLEX**, which opens the selected receptor/Vina result in the interpretation viewer.
 
-## where to download
-go to release page --- assets  --- 
+## Download
+
+Download the latest Windows x64 release from the
+[ELB-DockTool Releases](https://github.com/elbinroshak2003-art/ELB-DockTool/releases) page.
+
+Under **Assets**, download the Windows release ZIP:
+
+**ELB-DockTool-v1.2.0-win-x64.zip**
+
+Extract the ZIP and run:
+
+**ELB_DockTool.exe**
+
+### Installation
+
+1. Download the Windows x64 release ZIP from the Releases page.
+2. Extract the ZIP to a suitable folder.
+3. Run `ELB_DockTool.exe`.
+4. Open **Settings** and verify the required external tools.
+5. Configure Open Babel if it is not automatically detected.
+6. Verify Python/Meeko if receptor preparation is required.
+7. Verify or install the PDBFixer/OpenMM environment when receptor repair is required.
+
+No source-code or development files are required for normal use. 
 
 ## Integrated features
 - 3D protein cartoon representation
