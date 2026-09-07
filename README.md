@@ -2,6 +2,31 @@
 
 ELB-DockTool is a Windows desktop application developed in C# using .NET 8 and Windows Forms for receptor preparation, ligand preparation, molecular docking with AutoDock Vina, and post-docking result interpretation.
 
+## Download
+
+Download the latest Windows x64 release from the
+[ELB-DockTool Releases](https://github.com/elbinroshak2003-art/ELB-DockTool/releases) page.
+
+Under **Assets**, download the Windows release ZIP:
+
+**ELB-DockTool-v1.2.0-win-x64.zip**
+
+Extract the ZIP and run:
+
+**ELB_DockTool.exe**
+
+### Installation
+
+1. Download the Windows x64 release ZIP from the Releases page.
+2. Extract the ZIP to a suitable folder.
+3. Run `ELB_DockTool.exe`.
+4. Open **Settings** and verify the required external tools.
+5. Configure Open Babel if it is not automatically detected.
+6. Verify Python/Meeko if receptor preparation is required.
+7. Verify or install the PDBFixer/OpenMM environment when receptor repair is required.
+
+No source-code or development files are required for normal use.
+
 ## Main workflow
 
 1. Load or download a receptor structure (PDB/mmCIF where supported).
