@@ -1,4 +1,0 @@
-IMPPAT 2.0
-IMPPAT is an independent phytochemical database/resource. ELB DockTool does
-not claim ownership of its data. Users must follow the current IMPPAT terms.
-Official resource: https://cb.imsc.res.in/imppat/

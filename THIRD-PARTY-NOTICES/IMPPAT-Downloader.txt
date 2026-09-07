@@ -1,4 +1,0 @@
-IMPPAT downloader adaptation
-The IMPPAT downloader component is based on the supplied/reference
-implementation attributed to Sanjay Valliappan. The applicable MIT license
-and attribution remain independent of the ELB DockTool license.

@@ -1,7 +1,0 @@
-Meeko
-License: GNU Lesser General Public License v2.1 (LGPL-2.1)
-Project: https://github.com/forlilab/Meeko
-Documentation: https://meeko.readthedocs.io/
-
-Meeko is used for molecular/receptor and ligand parameterization and PDBQT
-preparation. It remains an independent third-party component.

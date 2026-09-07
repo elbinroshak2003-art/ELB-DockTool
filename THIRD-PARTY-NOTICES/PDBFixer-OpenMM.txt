@@ -1,5 +1,0 @@
-PDBFixer / OpenMM
-PDBFixer and OpenMM are independent third-party software used for receptor
-repair. Their respective upstream licenses and notices apply.
-Projects: https://github.com/openmm/pdbfixer
-         https://openmm.org/
