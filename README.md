@@ -39,7 +39,6 @@ No source-code or development files are required for normal use.
 - Geometry-based H-bond, hydrophobic, salt bridge, halogen-bond and pi-contact interpretation
 - Interaction table with distances in Å
 - Pose affinity and RMSD fields from Vina result records
-- 2D interaction diagram
 - PNG export controls labelled 96/150/300 DPI
 - CSV interaction export
 - White/dark background
