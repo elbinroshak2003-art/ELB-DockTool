@@ -1,0 +1,208 @@
+ELB DockTool v1.2.0
+ACADEMIC AND NON-COMMERCIAL RESEARCH LICENSE
+
+Copyright © 2026 ELBIN ROSHAK R. All rights reserved.
+
+IMPORTANT SCOPE STATEMENT
+=========================
+THIS LICENSE APPLIES ONLY TO THE PROPRIETARY ELB DOCKTOOL GUI, ITS
+PROPRIETARY C# APPLICATION CODE, PROPRIETARY UI/WORKFLOW LOGIC, AND OTHER
+COMPONENTS EXPRESSLY OWNED BY THE COPYRIGHT HOLDER (COLLECTIVELY, THE
+"ELB PROPRIETARY COMPONENTS").
+
+THIS LICENSE DOES NOT LICENSE, RE-LICENSE, OWN, RESTRICT, OR REPLACE THE
+LICENSE OF ANY THIRD-PARTY SOFTWARE, LIBRARY, DATABASE, DATASET, SERVICE,
+EXECUTABLE, MODEL, OR OTHER EXTERNAL RESOURCE USED BY OR CALLED FROM ELB
+DOCKTOOL. EACH THIRD-PARTY COMPONENT REMAINS GOVERNED BY ITS OWN LICENSE AND
+TERMS.
+
+In particular, this License is NOT the license for Meeko, AutoDock Vina,
+Open Babel, IMPPAT, RDKit, Python, or any other third-party component. Their
+respective licenses and terms remain independent.
+
+1. GRANT OF LICENSE
+====================
+Subject to the terms of this License, the copyright holder grants individuals,
+students, academic institutions, educational institutions, and non-profit
+research organizations a limited, non-exclusive, non-transferable,
+non-sublicensable license to use the ELB Proprietary Components solely for:
+
+- academic research;
+- teaching and educational activities;
+- non-commercial scientific research; and
+- personal, non-commercial research and evaluation.
+
+This permission is limited to the ELB Proprietary Components as supplied by
+the copyright holder.
+
+2. NO COMMERCIAL USE OF THE ELB PROPRIETARY COMPONENTS
+========================================================
+Commercial use of the ELB Proprietary Components is NOT permitted under this
+License.
+
+Commercial use includes, without limitation:
+
+- selling, licensing, renting, leasing, or sublicensing ELB DockTool;
+- incorporating ELB Proprietary Components into a commercial product or service;
+- using ELB Proprietary Components to provide paid services to third parties;
+- using ELB Proprietary Components in commercial research, contract research,
+  or fee-for-service work;
+- using ELB Proprietary Components for commercial screening, drug discovery,
+  consulting, or other revenue-generating activities.
+
+Commercial use of the ELB Proprietary Components requires separate written
+permission from the copyright holder.
+
+IMPORTANT: This section does NOT purport to prohibit a third-party component
+from being used under its own license. For example, the LGPL terms applicable
+to Meeko remain the terms governing Meeko itself.
+
+3. NO MODIFICATION OF ELB PROPRIETARY COMPONENTS
+=================================================
+You may not modify, adapt, translate, alter, patch, reverse engineer,
+decompile, disassemble, or create derivative works of the ELB Proprietary
+Components, except to the extent a non-waivable right under applicable law
+requires otherwise.
+
+This restriction does not modify or override the rights granted by a
+third-party license to that third-party component itself.
+
+4. NO REDISTRIBUTION OF ELB PROPRIETARY COMPONENTS
+===================================================
+You may not copy, publish, upload, mirror, share, distribute, redistribute,
+resell, sublicense, transfer, or otherwise make the ELB Proprietary Components
+available to another person or organization, except where separately
+authorized in writing by the copyright holder or required by applicable law.
+
+In particular, you may not:
+
+- upload ELB Proprietary Components or the ELB release package to another
+  public repository;
+- distribute the ELB release ZIP to other users;
+- create and distribute modified or repackaged versions of ELB DockTool; or
+- provide ELB Proprietary Components as part of another software package.
+
+This clause does NOT prohibit redistribution of an independent third-party
+component when that redistribution is permitted by that component's own
+license. Such redistribution must comply with the applicable third-party
+license and notices.
+
+5. THIRD-PARTY SOFTWARE AND EXTERNAL TOOLS
+===========================================
+ELB DockTool can use or invoke external software. Those components are NOT
+covered by this ELB Proprietary License. Their licenses remain separate.
+
+The following are examples relevant to this release:
+
+A. MEEKO
+---------
+Meeko is an independent open-source software project used by ELB DockTool for
+molecular/receptor and ligand parameterization and AutoDock-compatible PDBQT
+preparation.
+
+Meeko is licensed under the GNU Lesser General Public License, version 2.1
+(LGPL-2.1), according to the Meeko project/package metadata.
+
+ELB DockTool does not claim ownership of Meeko and does not change, replace,
+or narrow the LGPL-2.1 rights applicable to Meeko.
+
+For this ELB workflow, Meeko is invoked through a user-configured Python
+installation, for example:
+
+    python -m meeko.cli.mk_prepare_receptor
+
+The ELB package does not treat Meeko as part of the proprietary ELB GUI
+license. Users who install, use, modify, or redistribute Meeko must follow
+the LGPL-2.1 terms and Meeko's applicable notices.
+
+Meeko project:
+https://github.com/forlilab/Meeko
+
+Meeko documentation:
+https://meeko.readthedocs.io/
+
+A copy of the applicable Meeko LGPL-2.1 license text and a Meeko-specific
+notice are provided under THIRD-PARTY-NOTICES/Meeko/.
+
+B. AUTODOCK VINA
+----------------
+AutoDock Vina is an independent third-party docking program. It is not
+licensed under this ELB Proprietary License. The Vina executable included with
+this release remains subject to its applicable Apache License 2.0 and
+associated notices.
+
+C. IMPPAT 2.0
+-------------
+IMPPAT 2.0 is an independent phytochemical database/resource developed by its
+authors at the Institute of Mathematical Sciences. ELB DockTool does not
+claim ownership of the IMPPAT database or its underlying data.
+
+The Phytochemical Library retrieves available IMPPAT information at runtime.
+Users must comply with the current IMPPAT terms, attribution requirements,
+and applicable data license. ELB DockTool does not re-license IMPPAT data.
+
+Official IMPPAT resource:
+https://cb.imsc.res.in/imppat/
+
+D. IMPPAT DOWNLOADER ATTRIBUTION
+--------------------------------
+The adapted IMPPAT downloader component is attributed to Sanjay Valliappan
+(GitHub: sanjayvalliyappan08-kadappan) based on the supplied/reference
+implementation. The applicable MIT license and attribution are independent
+of this ELB Proprietary License.
+
+E. OTHER DEPENDENCIES
+---------------------
+Other external software or services may be used depending on the user's
+configuration, including Python, RDKit, ProDy, Open Babel, and related
+packages. They are not relicensed by this document. Each remains subject to
+its own applicable license and terms.
+
+6. DATA, DATABASES, AND ONLINE SERVICES
+=======================================
+Data returned from external databases or online services is not automatically
+owned by ELB DockTool. The ELB GUI provides functionality for accessing or
+processing such resources; it does not transfer ownership of the underlying
+data to the copyright holder.
+
+Users are responsible for complying with the terms of each external data
+source, including attribution, non-commercial restrictions, access rules,
+rate limits, and other applicable conditions.
+
+7. NO WARRANTY
+==============
+The ELB Proprietary Components are provided "AS IS" without warranties of any
+kind, to the maximum extent permitted by applicable law. The copyright holder
+does not warrant that the software, third-party tools, external databases, or
+online resources will be uninterrupted, error-free, complete, current, or fit
+for a particular purpose.
+
+8. LIMITATION OF LIABILITY
+==========================
+To the maximum extent permitted by applicable law, the copyright holder shall
+not be liable for any indirect, incidental, special, consequential, or other
+damages arising from or related to the use of the ELB Proprietary Components
+or their interaction with third-party software or external resources.
+
+9. TERMINATION
+==============
+This License terminates automatically if you violate its terms. Upon
+termination, you must stop using the ELB Proprietary Components and delete all
+copies in your possession or control, subject to any rights that continue to
+apply under independent third-party licenses.
+
+10. RESERVATION OF RIGHTS
+=========================
+All rights in the ELB Proprietary Components not expressly granted by this
+License are reserved by the copyright holder.
+
+Nothing in this License grants ownership or additional rights in any
+third-party software, database, data, service, or other external resource.
+
+11. COMMERCIAL LICENSING / PERMISSION
+======================================
+For commercial licensing of ELB Proprietary Components, permission to modify
+ELB Proprietary Components, or permission to redistribute ELB DockTool,
+contact:
+
+elbinroshak2003@gmail.com
