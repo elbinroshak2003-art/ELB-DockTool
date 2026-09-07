@@ -2,6 +2,9 @@
 
 This package integrates a WebView2-hosted, independently authored docking interpretation interface into the ELB-DockTool WinForms application. The Results page contains **VIEW COMPLEX**, which opens the selected receptor/Vina result in the interpretation viewer.
 
+## where to download
+go to release page --- assets  --- 
+
 ## Integrated features
 - 3D protein cartoon representation
 - Docked ligand sticks/spheres
@@ -28,12 +31,3 @@ This source package was prepared in an environment without the Windows .NET 8 SD
 
 The viewer currently loads 3Dmol.js from the official 3Dmol CDN, so the interpretation viewer requires internet access unless `InterpretationViewer/index.html` is changed to reference a locally bundled 3Dmol.js file.
 
-## Antivirus
-This package does not disable, bypass, or instruct users to bypass antivirus protection. It uses a normal folder-based deployment rather than `PublishSingleFile=true`. If an antivirus product flags a component, keep the detection information and verify the specific file rather than blindly restoring or whitelisting it.
-
-INTERPRETATION VIEWER UPDATE
-- Protein cartoon remains visible when surface is enabled; surface uses a darker semi-transparent blue-gray material.
-- Selected ligand is kept prominent and the binding-site region is used for view focusing.
-- PNG export now accepts a manually entered DPI value rather than fixed 96/150/300-DPI buttons.
-- RMSD is displayed as Vina RMSD lower/upper bounds (LB–UB), relative to the best-ranked mode; large values can be valid when poses are geometrically distinct.
-- 2D interaction map shows every residue within the selected 4/5/6 Å cutoff, with classified interaction types and distances plus unclassified contacts.
