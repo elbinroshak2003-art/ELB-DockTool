@@ -1,0 +1,6 @@
+AutoDock Vina
+License: Apache License 2.0
+Project: https://github.com/ccsb-scripps/AutoDock-Vina
+
+Vina is a third-party docking program. Its license does not form part of the
+ELB DockTool proprietary license.

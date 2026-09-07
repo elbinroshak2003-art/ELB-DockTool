@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ELB-DockTool — Docking Interpretation</title>
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<style>
+:root{
+ --bg:#07101c;--panel:#0f1928;--panel2:#142238;--line:#2b3b54;--text:#eef3fb;--muted:#9aa9bd;
+ --accent:#934cff;--good:#32d583;--lig:#ff9f1c;--surface:#5f7896;
+ --hbond:#4da3ff;--hyd:#2fd06f;--salt:#f0b323;--pi:#c58aff;--halo:#ff6464;--close:#9aa6b4
+}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+.app{height:100vh;display:flex;flex-direction:column}
+.header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);background:#0b1422}
+.title{font-size:19px;font-weight:800;letter-spacing:.2px}.sub{font-size:11px;color:var(--muted);margin-top:3px}.status{font-size:11px;color:var(--good);font-weight:700}
+.body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 405px}
+.viewer-wrap{position:relative;background:#fff;min-width:0}.viewer{position:absolute;inset:0}
+.viewer-tools{position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:10;flex-wrap:wrap}
+.tool{border:1px solid #5a6b82;background:rgba(8,15,26,.9);color:#fff;border-radius:6px;padding:7px 9px;font-size:11px;cursor:pointer}
+.tool:hover{background:#253550}.tool.active{background:#934cff;border-color:#934cff}
+.hint{position:absolute;bottom:10px;left:12px;padding:5px 8px;border-radius:5px;background:rgba(7,12,20,.72);font-size:10px;color:#dbe5f1;z-index:10}
+.side{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.section{padding:12px 14px;border-bottom:1px solid var(--line)}.section h3{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#d8e1ee;margin:0 0 9px}
+.row{display:flex;gap:7px;align-items:center;margin:7px 0}.row label{font-size:10px;color:var(--muted);min-width:92px}
+.select,.btn,.input{background:#111d2e;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:7px 8px;font-size:11px}
+.select{flex:1}.btn{cursor:pointer}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}.btn.active{outline:2px solid rgba(147,76,255,.35);background:#25324a}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px}.metric{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:8px}
+.metric .k{font-size:9px;color:var(--muted);text-transform:uppercase}.metric .v{font-size:14px;font-weight:700;margin-top:2px}
+.tabs{display:flex;border-bottom:1px solid var(--line);background:#0b1422}.tab{flex:1;padding:9px 6px;border:0;background:transparent;color:var(--muted);font-size:11px;cursor:pointer}.tab.active{color:#fff;border-bottom:2px solid var(--accent)}
+.panel{flex:1;min-height:0;overflow:auto}.table-wrap{max-height:285px;overflow:auto}.table{width:100%;border-collapse:collapse;font-size:10px}
+.table th{position:sticky;top:0;background:#17253a;color:#dce6f3;text-align:left;padding:6px;border-bottom:1px solid var(--line)}
+.table td{padding:6px;border-bottom:1px solid #223047;color:#d5dfec}.table tr:hover td{background:#1a2940}
+.badge{display:inline-block;padding:2px 5px;border-radius:8px;font-size:9px;font-weight:700}
+.hbond{background:#163c64;color:var(--hbond)}.hyd{background:#123b25;color:var(--hyd)}.salt{background:#4b3911;color:var(--salt)}.pi{background:#3b2755;color:var(--pi)}.halo{background:#4b1e23;color:var(--halo)}.close{background:#29323e;color:#b8c3d0}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.legend span{font-size:9px;color:var(--muted)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px}
+.notice{font-size:9px;color:#a9b6c7;line-height:1.4;margin-top:8px}
+.footer{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:7px;flex-wrap:wrap}.footer .btn{flex:1}
+.dpi-control{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--muted);font-size:10px}
+.dpi-input{width:78px;padding:6px}.mode-note{font-size:9px;color:#a9b6c7;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+ <div><div class="title">ELB-DockTool — Docking Interpretation</div><div class="sub" id="files">Loading receptor and Vina poses…</div></div>
+ <div class="status" id="status">● READY</div>
+</header>
+<div class="body">
+<main class="viewer-wrap" id="viewerWrap">
+ <div id="viewer" class="viewer"></div>
+ <div class="viewer-tools">
+  <button class="tool" id="fit">FIT</button>
+  <button class="tool" id="proteinOnly">PROTEIN</button>
+  <button class="tool active" id="complex">COMPLEX</button>
+  <button class="tool" id="surface">SURFACE</button>
+  <button class="tool" id="bg">WHITE BG</button>
+ </div>
+ <div class="hint">Left drag: rotate · middle/Ctrl+drag: pan · wheel: zoom</div>
+</main>
+<aside class="side">
+<section class="section">
+ <h3>Pose & search region</h3>
+ <div class="row"><label>Docking pose</label><select class="select" id="pose"></select></div>
+ <div class="row"><label>Nearby radius</label><select class="select" id="cutoff">
+  <option value="4">4.0 Å — strict</option><option value="5" selected>5.0 Å — standard</option><option value="6">6.0 Å — relaxed</option>
+ </select></div>
+ <div class="row"><label>Pose display</label><button class="btn" id="allPoses">Show all poses</button></div>
+ <div class="metrics">
+  <div class="metric"><div class="k">Affinity</div><div class="v" id="affinity">—</div></div>
+  <div class="metric"><div class="k">RMSD LB–UB</div><div class="v" id="rmsd">—</div></div>
+ </div>
+ <div class="mode-note">RMSD is reported exactly as AutoDock Vina's lower/upper bound values for the selected pose; it is not an experimental RMSD.</div>
+</section>
+<div class="tabs">
+ <button class="tab active" data-tab="interactions">Interactions</button>
+ <button class="tab" data-tab="residues">Nearby residues</button>
+</div>
+<section class="panel">
+<div id="tab-interactions" class="tab-content section">
+ <h3>Ligand–receptor interactions</h3>
+ <div class="metrics" style="grid-template-columns:repeat(4,1fr);">
+  <div class="metric"><div class="k">H-bond</div><div class="v" id="nH">0</div></div>
+  <div class="metric"><div class="k">Hydrophobic</div><div class="v" id="nHyd">0</div></div>
+  <div class="metric"><div class="k">Salt</div><div class="v" id="nSalt">0</div></div>
+  <div class="metric"><div class="k">π contact</div><div class="v" id="nPi">0</div></div>
+ </div>
+ <div class="table-wrap" style="margin-top:10px"><table class="table">
+  <thead><tr><th>Type</th><th>Residue</th><th>Ligand atom</th><th>Rec atom</th><th>Å</th></tr></thead>
+  <tbody id="intBody"></tbody>
+ </table></div>
+ <div class="legend">
+  <span><i class="dot" style="background:var(--hbond)"></i>H-bond</span>
+  <span><i class="dot" style="background:var(--hyd)"></i>Hydrophobic</span>
+  <span><i class="dot" style="background:var(--salt)"></i>Salt bridge</span>
+  <span><i class="dot" style="background:var(--pi)"></i>π contact</span>
+  <span><i class="dot" style="background:var(--halo)"></i>Halogen</span>
+  <span><i class="dot" style="background:var(--close)"></i>Close contact</span>
+ </div>
+ <div class="notice">Interaction labels are geometry-based interpretation aids. They should not be treated as a substitute for dedicated interaction-analysis software.</div>
+</div>
+<div id="tab-residues" class="tab-content section" style="display:none">
+ <h3>All residues within selected radius</h3>
+ <div class="table-wrap"><table class="table">
+  <thead><tr><th>Residue</th><th>Chain</th><th>Min distance (Å)</th><th>Contacts</th></tr></thead>
+  <tbody id="resBody"></tbody>
+ </table></div>
+ <div class="notice">Residues are ranked by minimum heavy-atom distance to the selected docking pose.</div>
+</div>
+</section>
+<footer class="footer">
+ <label class="dpi-control">PNG DPI <input id="dpiInput" class="input dpi-input" type="number" min="72" max="2400" step="1" value="300"></label>
+ <button class="btn primary" id="pngCustom">EXPORT PNG</button>
+ <button class="btn" id="csv">EXPORT CSV</button>
+ <button class="btn" id="reset">RESET VIEW</button>
+</footer>
+</aside>
+</div>
+</div>
+
+<script>
+const state={
+ viewer:null,receptorText:'',receptor:[],poses:[],pose:0,cutoff:5,white:true,mode:'complex',all:false,
+ interactions:[],residues:[]
+};
+const $=id=>document.getElementById(id);
+const COLORS={hbond:'#4da3ff',hyd:'#2fd06f',salt:'#f0b323',pi:'#c58aff',halo:'#ff6464',close:'#9aa6b4'};
+
+function atom(line,ligand=false,serialFallback=1){
+ const f=(a,b)=>line.substring(a,Math.min(a+b,line.length));
+ const serial=parseInt(f(6,5).trim())||serialFallback;
+ const name=f(12,4).trim(),res=f(17,3).trim(),chain=f(21,1).trim();
+ const resi=parseInt(f(22,4).trim()||'0');
+ const x=parseFloat(f(30,8)),y=parseFloat(f(38,8)),z=parseFloat(f(46,8));
+ let elem=f(77,2).trim().toUpperCase();
+ if(!elem) elem=(name.match(/[A-Za-z]+/)||['C'])[0].toUpperCase();
+ if(elem==='CL')elem='Cl';if(elem==='BR')elem='Br';
+ let charge=0;
+ const tail=line.substring(60);const nums=tail.match(/[-+]?\d+(?:\.\d+)?/g);
+ if(nums&&nums.length)charge=parseFloat(nums[0]);
+ return {serial,name,res,chain,resi,x,y,z,elem,charge,ligand};
+}
+function parseAtoms(text,ligand=false){
+ let n=0;
+ return text.split(/\r?\n/).filter(l=>l.startsWith('ATOM  ')||l.startsWith('HETATM')).map(l=>atom(l,ligand,++n)).filter(a=>Number.isFinite(a.x));
+}
+function parsePoses(text){
+ const lines=text.split(/\r?\n/),out=[];let cur=null,no=0;
+ for(const raw of lines){
+  const l=raw.trim();
+  if(l.startsWith('MODEL')){
+   if(cur&&cur.atoms.length)out.push(cur);
+   no=parseInt(l.split(/\s+/)[1])||no+1;
+   cur={number:no,affinity:NaN,lb:NaN,ub:NaN,atoms:[]};
+  }else if(l.startsWith('REMARK VINA RESULT:')){
+   if(!cur){no++;cur={number:no,affinity:NaN,lb:NaN,ub:NaN,atoms:[]}}
+   const m=l.match(/REMARK VINA RESULT:\s+([-+\d.]+)\s+([-+\d.]+)\s+([-+\d.]+)/);
+   if(m){cur.affinity=parseFloat(m[1]);cur.lb=parseFloat(m[2]);cur.ub=parseFloat(m[3]);}
+  }else if(l.startsWith('ATOM  ')||l.startsWith('HETATM')){
+   if(!cur){no++;cur={number:no,affinity:NaN,lb:NaN,ub:NaN,atoms:[]}}
+   const a=atom(raw,true,cur.atoms.length+1);if(Number.isFinite(a.x))cur.atoms.push(a);
+  }else if(l==='ENDMDL'){
+   if(cur&&cur.atoms.length){out.push(cur);cur=null}
+  }
+ }
+ if(cur&&cur.atoms.length)out.push(cur);
+ if(!out.length){
+  const atoms=parseAtoms(text,true);
+  if(atoms.length){
+   let affinity=NaN,lb=NaN,ub=NaN;
+   const m=text.match(/REMARK VINA RESULT:\s+([-+\d.]+)\s+([-+\d.]+)\s+([-+\d.]+)/);
+   if(m){affinity=parseFloat(m[1]);lb=parseFloat(m[2]);ub=parseFloat(m[3]);}
+   out.push({number:1,affinity,lb,ub,atoms});
+  }
+ }
+ return out;
+}
+function pdbFromAtoms(atoms,header){
+ const lines=[`HEADER    ${header}`];
+ atoms.forEach((a,i)=>{
+  const serial=(i+1).toString().padStart(5,' ');
+  const name=(a.name||a.elem).slice(0,4).padStart(4,' ');
+  const res=(a.res||'LIG').slice(0,3).padStart(3,' ');
+  const chain=(a.chain||'L').slice(0,1);
+  const resi=String(a.resi||1).padStart(4,' ');
+  const x=a.x.toFixed(3).padStart(8,' '),y=a.y.toFixed(3).padStart(8,' '),z=a.z.toFixed(3).padStart(8,' ');
+  const elem=(a.elem||'C').slice(0,2).padStart(2,' ');
+  lines.push(`ATOM  ${serial} ${name} ${res} ${chain}${resi}    ${x}${y}${z}  1.00  0.00          ${elem}`);
+ });
+ lines.push('END');return lines.join('\n');
+}
+function dist(a,b){const dx=a.x-b.x,dy=a.y-b.y,dz=a.z-b.z;return Math.hypot(dx,dy,dz)}
+function heavy(a){return a.elem!=='H'}
+function hydrophobicRes(r){return ['ALA','VAL','LEU','ILE','MET','PRO','PHE','TRP','TYR'].includes(r)}
+function aromaticRes(r){return ['PHE','TYR','TRP','HIS'].includes(r)}
+function chargeType(a){return a.charge>0.25?'pos':a.charge<-0.25?'neg':''}
+
+function analyze(pose){
+ const lig=pose.atoms.filter(heavy),rec=state.receptor.filter(heavy),by=new Map(),ints=[];
+ for(const la of lig)for(const ra of rec){
+  const d=dist(la,ra);if(d>state.cutoff)continue;
+  const key=`${ra.res}:${ra.resi}:${ra.chain}`;
+  if(!by.has(key))by.set(key,{res:ra.res,resi:ra.resi,chain:ra.chain,min:d,contacts:0,closest:ra});
+  const q=by.get(key);q.min=Math.min(q.min,d);q.contacts++;if(d===q.min)q.closest=ra;
+  let type='';
+  if(d<=3.5&&['N','O','S'].includes(la.elem)&&['N','O','S'].includes(ra.elem))type='Hydrogen bond';
+  else if(d<=4.0&&((chargeType(la)==='pos'&&chargeType(ra)==='neg')||(chargeType(la)==='neg'&&chargeType(ra)==='pos')))type='Salt bridge';
+  else if(d<=3.5&&['Cl','Br','I'].includes(la.elem)&&['N','O','S'].includes(ra.elem))type='Halogen bond';
+  else if(d<=4.0&&hydrophobicRes(ra.res)&&['C','S'].includes(la.elem))type='Hydrophobic';
+  else if(d<=4.5&&aromaticRes(ra.res)&&['C','N','S'].includes(la.elem))type='π contact';
+  if(type)ints.push({type,res:ra.res,resi:ra.resi,chain:ra.chain,lig:la.name,ligresi:la.resi,ligchain:la.chain,rec:ra.name,d,la,ra});
+ }
+ const seen=new Set(),unique=[];
+ for(const x of ints){
+  const k=`${x.type}|${x.res}|${x.resi}|${x.chain}|${x.lig}|${x.rec}`;
+  if(!seen.has(k)){seen.add(k);unique.push(x)}
+ }
+ return {ints:unique,residues:[...by.values()].sort((a,b)=>a.min-b.min)};
+}
+
+function receptorSelectionAtoms(){
+ const ids=[];
+ for(const r of state.residues){
+  state.receptor.forEach(a=>{if(a.res===r.res&&a.resi===r.resi&&a.chain===r.chain)ids.push(a.serial)})
+ }
+ return ids;
+}
+
+function styleScene(){
+ const v=state.viewer;if(!v)return;
+ v.removeAllModels();v.removeAllShapes();v.removeAllSurfaces();v.removeAllLabels();
+ v.setBackgroundColor(state.white?'#ffffff':'#07101c');
+
+ const recModel=v.addModel(pdbFromAtoms(state.receptor,'ELB RECEPTOR'),'pdb');
+ const receptorColor=state.white?'spectrum':'spectrum';
+
+ if(state.mode==='surface'){
+  // Surface mode intentionally replaces the cartoon, using a distinct blue-grey surface.
+  v.addSurface($3Dmol.SurfaceType.VDW,{
+   opacity:0.72,color:state.white?'#66809e':'#6f89a8',wireframe:false
+  },{model:0});
+ }else{
+  recModel.setStyle({},{
+   cartoon:{color:receptorColor,opacity:0.98,thickness:0.9},
+   stick:{hidden:true}
+  });
+  const ids=receptorSelectionAtoms();
+  if(ids.length){
+   recModel.setStyle({serial:ids},{
+    cartoon:{color:'#f2b134',opacity:1},
+    stick:{radius:0.14,color:'#f2b134',opacity:0.95}
+   },true);
+  }
+ }
+
+ // Render ligand in COMPLEX and SURFACE modes. Convert PDBQT atoms to PDB
+ // first so the ligand remains visible even when a PDBQT parser behaves differently.
+ if(state.mode!=='protein'){
+  const poses=state.all?state.poses:[state.poses[state.pose]];
+  poses.forEach((p)=>{
+   const lm=v.addModel(pdbFromAtoms(p.atoms,`ELB LIGAND POSE ${p.number}`),'pdb');
+   const active=state.all?(p===state.poses[state.pose]):true;
+   lm.setStyle({},{
+    stick:{radius:active?0.25:0.12,colorscheme:'Jmol',opacity:active?1:0.28},
+    sphere:{scale:active?0.32:0.18,colorscheme:'Jmol',opacity:active?0.95:0.24}
+   });
+  });
+ }
+
+ // Interaction/contact lines use the selected pose only.
+ const p=state.poses[state.pose];
+ if(p&&state.mode!=='protein'){
+  for(const x of state.interactions){
+   v.addCylinder({
+    start:{x:x.la.x,y:x.la.y,z:x.la.z},
+    end:{x:x.ra.x,y:x.ra.y,z:x.ra.z},
+    radius:0.045,dashed:true,color:COLORS[x.type==='Hydrogen bond'?'hbond':x.type==='Hydrophobic'?'hyd':x.type==='Salt bridge'?'salt':x.type==='Halogen bond'?'halo':'pi']
+   });
+  }
+ }
+ // Focus the actual ligand atom coordinates together with the binding-site
+ // receptor atoms. In protein mode, fit the whole receptor instead.
+ const ligandIds=(p?p.atoms:[]).map((_,i)=>i+1);
+ const recIds=receptorSelectionAtoms();
+ let focus;
+ if(state.mode==='protein') focus={model:0};
+ else focus=state.all?null:{or:[{model:1,serial:ligandIds},{model:0,serial:recIds}]};
+ if(focus)v.zoomTo(focus);else v.zoomTo();
+ v.zoom(1.05);
+ v.render();
+}
+
+function refresh(){
+ const p=state.poses[state.pose];if(!p)return;
+ $('affinity').textContent=Number.isFinite(p.affinity)?p.affinity.toFixed(2)+' kcal/mol':'—';
+ $('rmsd').textContent=Number.isFinite(p.lb)&&Number.isFinite(p.ub)?p.lb.toFixed(2)+'–'+p.ub.toFixed(2)+' Å':'—';
+ const a=analyze(p);state.interactions=a.ints;state.residues=a.residues;
+ $('nH').textContent=a.ints.filter(x=>x.type==='Hydrogen bond').length;
+ $('nHyd').textContent=a.ints.filter(x=>x.type==='Hydrophobic').length;
+ $('nSalt').textContent=a.ints.filter(x=>x.type==='Salt bridge').length;
+ $('nPi').textContent=a.ints.filter(x=>x.type==='π contact').length;
+ $('intBody').innerHTML=a.ints.length?a.ints.slice(0,200).map(x=>`<tr><td><span class="badge ${x.type==='Hydrogen bond'?'hbond':x.type==='Hydrophobic'?'hyd':x.type==='Salt bridge'?'salt':x.type==='Halogen bond'?'halo':'pi'}">${x.type}</span></td><td>${x.res}${x.resi}${x.chain?` (${x.chain})`:''}</td><td>${x.lig}</td><td>${x.rec}</td><td>${x.d.toFixed(2)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No classified interactions within the selected cutoff.</td></tr>';
+ $('resBody').innerHTML=a.residues.length?a.residues.map(x=>`<tr><td>${x.res}${x.resi}</td><td>${x.chain||'—'}</td><td>${x.min.toFixed(2)}</td><td>${x.contacts}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">No residues found.</td></tr>';
+ styleScene();
+}
+
+function exportCsv(){
+ const rows=[['Type','Residue','Chain','Ligand atom','Receptor atom','Distance_A']];
+ state.interactions.forEach(x=>rows.push([x.type,x.res,x.chain,x.lig,x.rec,x.d.toFixed(3)]));
+ const blob=new Blob([rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n')],{type:'text/csv'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ELB_pose_${state.pose+1}_interactions.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+async function exportPng(){
+ const value=Math.round(Number($('dpiInput').value||300));
+ if(!Number.isFinite(value)||value<72||value>2400){alert('Enter a PNG DPI between 72 and 2400.');return}
+ const scale=value/96,wrap=$('viewerWrap'),w=Math.max(800,Math.round(wrap.clientWidth*scale)),h=Math.max(600,Math.round(wrap.clientHeight*scale));
+ const holder=document.createElement('div');holder.style.cssText=`position:fixed;left:-100000px;top:0;width:${w}px;height:${h}px;background:${state.white?'#fff':'#07101c'}`;document.body.appendChild(holder);
+ const ev=$3Dmol.createViewer(holder,{backgroundColor:state.white?'white':'#07101c',antialias:true});
+ const rm=ev.addModel(pdbFromAtoms(state.receptor,'ELB RECEPTOR'),'pdb');
+ if(state.mode==='surface')ev.addSurface($3Dmol.SurfaceType.VDW,{opacity:.72,color:state.white?'#66809e':'#6f89a8'},{model:0});
+ else rm.setStyle({}, {cartoon:{color:'spectrum',opacity:.98}});
+ const p=state.poses[state.pose];
+ if(state.mode!=='protein'){
+  const lm=ev.addModel(pdbFromAtoms(p.atoms,'ELB LIGAND'),'pdb');
+  lm.setStyle({}, {stick:{radius:.25,colorscheme:'Jmol',opacity:1},sphere:{scale:.32,colorscheme:'Jmol',opacity:.95}});
+ }
+ const ids=receptorSelectionAtoms();if(ids.length&&state.mode!=='surface')rm.setStyle({serial:ids},{cartoon:{color:'#f2b134'},stick:{radius:.14,color:'#f2b134'}},true);
+ if(state.mode!=='protein') state.interactions.forEach(x=>ev.addCylinder({start:x.la,end:x.ra,radius:.045,dashed:true,color:COLORS[x.type==='Hydrogen bond'?'hbond':x.type==='Hydrophobic'?'hyd':x.type==='Salt bridge'?'salt':x.type==='Halogen bond'?'halo':'pi']}));
+ const focus=state.mode==='protein'?{model:0}:{or:[{model:1,serial:p.atoms.map((_,i)=>i+1)},{model:0,serial:ids}]};ev.zoomTo(focus);ev.zoom(1.05);ev.render();
+ await new Promise(r=>setTimeout(r,350));
+ const uri=ev.pngURI();const a=document.createElement('a');a.href=uri;a.download=`ELB_pose_${state.pose+1}_${value}dpi.png`;a.click();
+ ev.clear();holder.remove();
+}
+
+function setTab(t){
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+ document.querySelectorAll('.tab-content').forEach(x=>x.style.display=x.id==='tab-'+t?'block':'none');
+}
+async function init(){
+ try{
+  const [rText,vText]=await Promise.all([fetch('receptor.pdbqt').then(r=>r.text()),fetch('vina_result.pdbqt').then(r=>r.text())]);
+  state.receptorText=rText;state.receptor=parseAtoms(rText,false);state.poses=parsePoses(vText);
+  if(!state.receptor.length)throw new Error('No receptor atoms could be parsed from receptor.pdbqt.');
+  if(!state.poses.length)throw new Error('No docking poses could be parsed from vina_result.pdbqt.');
+  $('files').textContent=`${location.search?decodeURIComponent(location.search.substring(1)):'Docking result'} · ${state.poses.length} pose(s)`;
+  state.viewer=$3Dmol.createViewer('viewer',{backgroundColor:'white',antialias:true});
+  state.poses.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`Pose ${i+1}${Number.isFinite(p.affinity)?` · ${p.affinity.toFixed(2)} kcal/mol`:''}`;$('pose').appendChild(o)});
+  $('pose').value=0;refresh();$('status').textContent='● READY';
+ }catch(e){$('status').textContent='● ERROR';document.querySelector('.viewer').innerHTML=`<div class="empty" style="color:#b42318;margin:30px">Could not load docking files.<br><br>${e.message}</div>`}
+}
+
+$('pose').onchange=e=>{state.pose=+e.target.value;refresh()};
+$('cutoff').onchange=e=>{state.cutoff=+e.target.value;refresh()};
+$('fit').onclick=()=>{styleScene()};
+$('proteinOnly').onclick=()=>{state.mode='protein';document.querySelectorAll('.tool').forEach(b=>b.classList.remove('active'));$('proteinOnly').classList.add('active');styleScene()};
+$('complex').onclick=()=>{state.mode='complex';document.querySelectorAll('.tool').forEach(b=>b.classList.remove('active'));$('complex').classList.add('active');styleScene()};
+$('surface').onclick=()=>{state.mode='surface';document.querySelectorAll('.tool').forEach(b=>b.classList.remove('active'));$('surface').classList.add('active');styleScene()};
+$('bg').onclick=()=>{state.white=!state.white;$('bg').textContent=state.white?'WHITE BG':'DARK BG';styleScene()};
+$('allPoses').onclick=()=>{state.all=!state.all;$('allPoses').textContent=state.all?'Selected pose only':'Show all poses';styleScene()};
+$('csv').onclick=exportCsv;$('pngCustom').onclick=exportPng;
+$('reset').onclick=()=>{state.white=true;state.mode='complex';state.all=false;$('bg').textContent='WHITE BG';$('allPoses').textContent='Show all poses';document.querySelectorAll('.tool').forEach(b=>b.classList.remove('active'));$('complex').classList.add('active');$('pose').value=state.pose;styleScene()};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+init();
+</script>
+</body>
+</html>

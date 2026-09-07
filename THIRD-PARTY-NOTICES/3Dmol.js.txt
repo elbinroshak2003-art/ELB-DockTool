@@ -1,0 +1,6 @@
+3Dmol.js
+License: BSD 3-Clause
+Project: https://github.com/3dmol/3Dmol.js
+
+3Dmol.js is used by the independent ELB DockTool molecular interpretation
+viewer. The viewer integration code is independently authored and is not
