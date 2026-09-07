@@ -1,0 +1,9 @@
+IMPPAT DOWNLOADER ADAPTATION — THIRD-PARTY ATTRIBUTION
+
+The adapted/reference IMPPAT downloader component is attributed to Sanjay
+Valliappan (GitHub: sanjayvalliyappan08-kadappan) based on the supplied/reference
+implementation.
+
+The applicable MIT license and attribution are independent of the ELB
+DockTool proprietary license. The ELB license does not re-license the original
+work.

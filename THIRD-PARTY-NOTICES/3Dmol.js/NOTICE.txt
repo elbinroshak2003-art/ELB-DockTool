@@ -1,0 +1,3 @@
+3Dmol.js is used by ELB-DockTool's independent docking interpretation viewer.
+Project: https://github.com/3dmol/3Dmol.js
+License: BSD 3-Clause.
