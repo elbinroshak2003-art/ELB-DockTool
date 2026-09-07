@@ -48,8 +48,5 @@ No source-code or development files are required for normal use.
 ## Technology
 The desktop shell remains C#/.NET 8 WinForms. The molecular rendering/interpretation surface is hosted through Microsoft WebView2 and uses 3Dmol.js. WebView2 is designed for embedding web content in WinForms applications, and 3Dmol.js supports cartoon/stick/surface molecular representations and PNG image export.
 
-## Important build note
-This source package was prepared in an environment without the Windows .NET 8 SDK, so a new Windows executable could not be compiled here. Run `BUILD_EXE.bat` on a Windows machine with the .NET 8 SDK. The script produces a **folder-based, non-single-file** self-contained build to reduce the heuristic risk associated with single-file packaging.
 
-The viewer currently loads 3Dmol.js from the official 3Dmol CDN, so the interpretation viewer requires internet access unless `InterpretationViewer/index.html` is changed to reference a locally bundled 3Dmol.js file.
 
